@@ -13,6 +13,9 @@ data = soup.find_all('script')
 pattern = re.compile(r'vm.FullDirectory = (\{.*?\});', re.DOTALL)
 outp = None
 
+## Will Need for function later
+# print(manga_names.index('3-Gatsu-No-Lion',0,len(manga_names)))
+
 for script in data:
     match = pattern.search(str(script))
     if match:
@@ -50,6 +53,8 @@ if i:
 
 else:
     print("JSON data not found")
+
+    
 
 #chapterNum = int(chapters[1][1:-1])
 #print(chapterNum)
