@@ -7,7 +7,7 @@ html_content = response.content
 soup = BeautifulSoup(html_content, 'html.parser')
 
 manga_names = []
-
+chapters = []
 data = soup.find_all('script')
 
 pattern = re.compile(r'vm.FullDirectory = (\{.*?\});', re.DOTALL)
@@ -27,13 +27,29 @@ if outp:
 else:
     print("JSON data not found")
 
-url = f'https://mangasee123.com/manga/'+manga_names[1]
-#url = 'https://mangasee123.com/read-online/Myuun-I-chapter-1-page-6.html'
+url = f'https://mangasee123.com/manga/'+manga_names[47]
 response = requests.get(url)
 html_content = response.content
 productPage = BeautifulSoup(html_content, 'html.parser')
 
-#chapterLinks = productPage.find('a',{"class": "ChapterLink"})["href"]
-chapterLinks = productPage.find_all('a',{"class": "list-group-item ChapterLink"})
-print(chapterLinks)
+chapterLinks = productPage.find_all('script')
+chptpattern = re.compile(r'vm.Chapters = (\[[^\]]*\]);', re.DOTALL)
+i = None
 
+
+for i in chapterLinks:
+    match = chptpattern.search(str(i))
+    if match:
+        i = json.loads(match.group(1))
+        break
+
+if i:
+    chapters= [json_object['Chapter'] for json_object in i]
+    print(manga_names[47])
+    print(len(chapters))
+
+else:
+    print("JSON data not found")
+
+#chapterNum = int(chapters[1][1:-1])
+#print(chapterNum)
