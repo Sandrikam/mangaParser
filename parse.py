@@ -2,7 +2,9 @@ import requests,json,re,sys
 from bs4 import BeautifulSoup
 
 url = 'https://mangasee123.com/directory/'
+print(url)
 response = requests.get(url)
+desiredManga='5-Ji-Kara9-Ji-Made'
 html_content = response.content
 soup = BeautifulSoup(html_content, 'html.parser')
 
@@ -30,7 +32,11 @@ if outp:
 else:
     print("JSON data not found")
 
-url = f'https://mangasee123.com/manga/'+manga_names[47]
+mangaCode=manga_names.index(desiredManga,0,len(manga_names))
+url = f'https://mangasee123.com/manga/'+manga_names[mangaCode]
+print(url)
+
+print(mangaCode)
 response = requests.get(url)
 html_content = response.content
 productPage = BeautifulSoup(html_content, 'html.parser')
@@ -48,13 +54,15 @@ for i in chapterLinks:
 
 if i:
     chapters= [json_object['Chapter'] for json_object in i]
-    print(manga_names[47])
+    chapterNum = str(int(chapters[1][1:-1]))
+    print(manga_names[mangaCode])
     print(len(chapters))
 
 else:
     print("JSON data not found")
 
+url=f'https://mangasee123.com/read-online/'+manga_names[mangaCode]+'-chapter-'+chapterNum+'-page-1.html'
     
-
+print(url)
 #chapterNum = int(chapters[1][1:-1])
 #print(chapterNum)
